@@ -4,9 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>O GIT deseja um Feliz Natal 🎁🎄🎅</title>
-    <link href="https://fonts.cdnfonts.com/css/christmas-classica" rel="stylesheet">
     <style>
-        @import url('https://fonts.cdnfonts.com/css/christmas-classica');
         /* Christmas palette:
            pine green:   #0b3d2e
            festive red:  #b71c1c
@@ -32,8 +30,8 @@
             font-family: "Avenir", "Avenir Next", "Helvetica Neue", Helvetica, Arial, sans-serif;
             margin: 0;
             padding: 0;
-            /* background image with subtle cream overlay for legibility */
-            background: linear-gradient(rgba(255,248,240,0.15), rgba(255,248,240,0.35)),
+            
+            background: linear-gradient(rgba(255, 248, 240, 0.02), rgba(255,248,240,0.15)),
                         url('https://images.squarespace-cdn.com/content/v1/5942fb7ee3df28eb9babbc38/1731539450654-EIYJL32FE223TMNQMFKM/still-life-christmas-decoration-with-copy-space.jpg?format=2500w')
                         center/cover no-repeat fixed;
             color: var(--muted-text);
@@ -41,6 +39,18 @@
             align-items: center;
             justify-content: center;
             min-height: 100vh;
+        }
+        /* snowfall/video overlay: use a background video element for moving snow */
+        .background-video {
+            position: fixed;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* crop to fill while preserving aspect */
+            object-position: center top;
+            pointer-events: none;
+            opacity: 0.85;
+            z-index: 0;
         }
         .email-container {
             max-width: 600px;
@@ -53,50 +63,74 @@
             /* add a bit of responsive breathing room on small screens */
             margin-left: 16px;
             margin-right: 16px;
+            position: relative;
+            z-index: 1; /* ensure content sits above snowfall overlay */
         }
         .header {
-            background-color: var(--pine-green);
-            color: var(--cream-bg);
+            background-color: var(--cream-bg);
+            color: var(--pine-green);
             padding: 20px;
             text-align: center;
         }
         .banner-container {
             position: relative;
             width: 100%;
-            min-height: 280px; /* increased to avoid clipping */
+            aspect-ratio: 4 / 3; /* prefer 4:3 ratio */
+            min-height: 360px; /* make the banner bigger by default */
+            max-height: 720px; /* prevent it from becoming excessively tall on large screens */
             overflow: hidden;
+            transition: opacity 420ms ease, transform 420ms ease;
+            will-change: opacity, transform;
         }
         .banner {
+            position: relative;
             width: 100%;
-            /* use padding and min-height instead of fixed height so content flows */
-            min-height: 320px;
-            padding: 28px 20px;
-            background: linear-gradient(rgba(11,61,46,0.55), rgba(11,61,46,0.65)), url('file:///C:/Users/u09069/Downloads/E%20um%20pr%C3%B3spero%20Ano%20Novo.html');
-            background-size: cover;
-            background-position: center;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
+            height: 100%; /* fill the .banner-container height */
             color: var(--warm-gold);
             text-align: center;
         }
+
+        .banner-img {
+            width: 100%;
+            height: 100%; /* fill the banner box */
+            display: block;
+            object-fit: cover; /* crop to fill while preserving aspect */
+            object-position: center center; /* keep image centered */
+        }
+
+        .banner-content {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end; /* place content at bottom */
+            align-items: center;
+            color: var(--warm-gold);
+            text-align: center;
+            padding: 1rem;
+            padding-bottom: 1.15rem; /* extra spacing from the bottom edge */
+            pointer-events: none;
+            z-index: 2; /* ensure content sits above the image */
+        }
+
+        /* fade-out helper used before removing the banner from the DOM */
+        .banner-container.fade-out {
+            opacity: 0;
+            transform: translateY(-10px);
+            pointer-events: none;
+        }
+
+        .banner-content > * {
+            pointer-events: auto;
+        }
         .banner h1 {
-            font-size: 4.5rem;
-            font-family: 'Christmas Classica', 'ChristmasClassica', cursive, sans-serif !important;
-            font-weight: 700;
+            font-size: 2.5rem;
             margin: 0;
             color: var(--warm-gold);
             text-shadow: 3px 3px 8px rgba(0,0,0,0.7);
         }
-        .banner h1 .christmas {
-            font-family: 'Christmas Classica', 'ChristmasClassica', cursive, sans-serif !important;
-            font-weight: 700;
-            display: inline-block;
-            line-height: 1;
-        }
         .banner p {
-            font-size: 1.3rem;
+            font-size: 1.2rem;
             margin: 10px 0 20px;
             color: #fff5d6;
         }
@@ -106,11 +140,15 @@
             padding: 12px 25px;
             border-radius: 30px;
             font-weight: bold;
-            font-size: 1.1rem;
+            font-size: 0.95rem;
             cursor: pointer;
             transition: transform 0.18s ease, box-shadow 0.18s ease, opacity 0.18s ease;
-            border: 2px solid rgba(255,213,74,0.08);
+            border: 2px solid rgba(255,213,74,0.18);
             box-shadow: 0 6px 18px rgba(183, 28, 28, 0.11)
+        }
+
+        .click-here {
+            margin-bottom: 7px; /* ensure a small gap from the bottom */
         }
         .click-here:hover {
             background-color: var(--deep-red);
@@ -124,41 +162,52 @@
         }
         .question {
             font-size: 1.5rem;
-            color: var(--pine-green);
+            color: var(--festive-red);
             margin-bottom: 25px;
             font-weight: bold;
         }
         .options {
             display: flex;
             justify-content: center;
-            gap: 20px;
+            gap: 16px;
             margin-bottom: 30px;
         }
+
+        /* make option buttons match the click-here button's shape and weight */
         .option-btn {
-            padding: 12px 30px;
-            font-size: 1.1rem;
+            padding: 12px 25px; /* match click-here */
+            font-size: 0.95rem;
             border: none;
-            border-radius: 8px;
+            border-radius: 30px; /* pill shape like click-here */
             cursor: pointer;
             font-weight: bold;
-            transition: all 0.25s;
-            box-shadow: 0 4px 12px rgba(11,61,46,0.06);
+            transition: transform 0.18s ease, box-shadow 0.18s ease, opacity 0.18s ease;
+            box-shadow: 0 6px 18px rgba(11,61,46,0.06);
+            min-width: 160px; /* give similar visual width */
+            display: inline-block;
+            text-align: center;
         }
+
         .yes-btn {
             background: linear-gradient(180deg, var(--pine-green), #0f4f3d);
             color: var(--cream-bg);
             border: 2px solid rgba(255,213,74,0.06);
+            box-shadow: 0 6px 18px rgba(15,79,61,0.12);
         }
         .yes-btn:hover {
             filter: brightness(1.05);
+            transform: translateY(-2px) scale(1.02);
         }
+
         .no-btn {
             background: linear-gradient(180deg, var(--festive-red), var(--deep-red));
             color: var(--cream-bg);
-            border: 2px solid rgba(0,0,0,0.06);
+            border: 2px solid rgba(255,213,74,0.08);
+            box-shadow: 0 6px 18px rgba(183,28,28,0.12);
         }
         .no-btn:hover {
             filter: brightness(1.03);
+            transform: translateY(-2px) scale(1.02);
         }
         .message {
             padding: 20px;
@@ -168,7 +217,6 @@
         }
         .fact-message {
             background-color: var(--light-green);
-            border-left: 6px solid var(--pine-green);
             color: var(--pine-green);
             display: flex;
             gap: 18px;
@@ -220,6 +268,44 @@
             margin: 6px 0;
         }
 
+        /* small linked image grid under interactive text */
+        .grid-title {
+            text-align: center;
+            font-size: 0.95rem;
+            color: var(--pine-green);
+            font-weight: 700;
+            margin-top: 14px;
+            margin-bottom: 8px;
+        }
+
+        .resource-grid {
+            width: 100%;
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            padding: 10px 12px 18px;
+            box-sizing: border-box;
+        }
+
+        .resource-item a {
+            display: inline-block;
+            width: 80px;
+            height: auto;
+            overflow: hidden;
+            border-radius: 6px;
+            border: 2px solid rgba(11,61,46,0.06);
+            box-shadow: 0 3px 8px rgba(11,61,46,0.06);
+        }
+
+        .resource-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
         @media (max-width: 520px) {
             .fact-message {
                 flex-direction: column;
@@ -234,7 +320,6 @@
 
         .unacceptable-message {
             background-color: var(--light-red);
-            border-left: 6px solid var(--festive-red);
             color: var(--festive-red);
         }
         .countdown {
@@ -244,14 +329,14 @@
             color: var(--warm-gold);
         }
         .footer {
-            background-color: var(--pine-green);
-            color: var(--cream-bg);
+            background-color: var(--cream-bg);
+            color: var(--pine-green);
             padding: 20px;
             text-align: center;
             font-size: 0.9rem;
         }
         .footer a {
-            color: var(--cream-bg);
+            color: var(--pine-green);
             text-decoration: none;
             font-weight: 700;
         }
@@ -270,6 +355,12 @@
     </style>
 </head>
 <body>
+    <!-- Background video (MOV). Note: some browsers may not support .mov — consider providing an MP4/WebM fallback for wide compatibility. -->
+    <video id="backgroundVideo" class="background-video" autoplay muted loop playsinline>
+        <source src="https://ik.imagekit.io/eydsmhc4x/natal/AdobeStock_1839912194.mov" type="video/quicktime">
+        <!-- If you convert to mp4 use: type="video/mp4" and include an mp4 <source> here as fallback. -->
+    </video>
+
     <div class="email-container">
         <div class="header">
             <h2>GABINETE DE INTELIGÊNCIA TERRITORIAL</h2>
@@ -277,89 +368,150 @@
         
         <div class="banner-container">
             <div class="banner">
-                <p class="banner-pretitle">O GIT deseja-lhe um</p>
-                <h1><span class="christmas">Feliz Natal</span></h1>
-                <p class="banner-line"></p>
-                <p class="banner-sign"></p>
-                <button class="click-here" onclick="showInteractiveSection()">Descubra o que fizemos em 2025</button>
+                <img class="banner-img" src="https://ik.imagekit.io/eydsmhc4x/natal/E%20um%20pr%C3%B3spero%20Ano%20Novo%20(1).png" alt="Banner">
+                <div class="banner-content">
+                    <p></p>
+                    <h1><b></b></h1>
+                    <p></p>
+                    <button class="click-here" onclick="showInteractiveSection()">Oeiras à distância de um clique</button>
+                </div>
             </div>
         </div>
-        
-        <div class="interactive-section" id="interactiveSection">
-            <div class="question">Sabia que em 2025 o GIT desenvolveu dezenas de novas funcionalidades para o Oeiras Interativa?</div>
+
+        <div class="interactive-section" id="interactiveSection" style="display:none; text-align: center; padding: 20px;">
+            <div class="question">
+                Este Natal o maior presente é um mundo mais <b>justo</b> e <b>sustentável</b> para todos.
+            </div>
+            <br>
+            <p style="color: var(--pine-green); font-size: 1.0em; max-width: 500px; margin: 15px auto; line-height: 1.5;">
+                No GIT, criamos <b>inteligência territorial</b>. <p>No <a href="https://oeirasinterativa.oeiras.pt/#/portal/home"></a><b>Oeiras Interativa</b></a> partilhamo-la com o mundo.</p>
+            </p>
+            <br>
+            <h3 style="color: var(--muted-text);">Já faz parte desta rede?</h3>
+
             <div class="options">
-            </div>
-            <a class="page-preview" href="https://oeirasinterativa.oeiras.pt/" target="_blank" rel="noopener noreferrer" title="Abrir Oeiras Interativa">
-                    <!-- quick screenshot service used for example; replace with your own image if preferred -->
-                    <img src="https://oeirasinterativa.oeiras.pt/api/uploads/portal/modules/config/geoportal_v3-min.png" alt="Pré-visualização do site Oeiras Interativa">
-                </a>
-                <br>
-                <br>
-                <button class="option-btn yes-btn" onclick="showFact()">Sim</button>
-                <button class="option-btn no-btn" onclick="showUnacceptable()">Não</button>
-            <div class="message fact-message" id="factMessage">
-                    <div class="fact-content">
-                        <h3>E sabia que?</h3>
-                        <p>O Oeiras Interativa é uma plataforma orientada para o utilizador final que permite aceder a mapas pelo GeoPortal, consultar descrições e metadados, explorar dados e estatísticas no <a href="https://oeirasinterativa.oeiras.pt/#/os/home">Observatório</a> e ainda acompanhar Oeiras em tempo real.</p>
-                        
-                    </div>
-                    <br>
-            </div>
-            <p><b>Feliz Natal e um excelente Ano Novo de toda a equipa do GIT!</b></p>
-            
-            <div class="message unacceptable-message" id="unacceptableMessage">
-                <h3><i>A imaginação é mais importante que o conhecimento. O importante é não deixar de questionar.</i></h3> <p><right>- Einstein</right></p>
-                <p></p>
-                <p>Vamos começar por inscrevê-lo na plataforma para que possa explorar. </p><p>Será redirecionado para a página de registo em <b><span id="countdown">5</span></b> segundos...</p>
+                <button class="option-btn yes-btn" onclick="showFact()">Sim, já participo!</button>
+                <button class="option-btn no-btn" onclick="showUnacceptable()">Ainda não conheço</button>
             </div>
         </div>
         
         <div class="footer">
-            <p>© 2025 GIT. Todos os direitos reservados.</p>
-            <p><a href="https://oeirasinterativa.oeiras.pt/">Visite o Oeiras Interativa</a>     |     <a href="mailto:git@oeiras.pt">Tem dúvidas? Contacte-nos!</a></p>
+            <p><b>© 2025 GIT.</b> Todos os direitos reservados.</p>
+            <p><a href="https://oeirasinterativa.oeiras.pt/">Visite o Oeiras Interativa</a>     |     <a href="mailto:git@oeiras.pt">Tem dúvidas? Contacte-nos</a></p>
         </div>
     </div>
 
     <script>
         function showInteractiveSection() {
-            document.getElementById('interactiveSection').style.display = 'block';
+            const interactive = document.getElementById('interactiveSection');
+            if (!interactive) return;
+
+            // reveal interactive area immediately
+            interactive.style.display = 'block';
+
+            // animate banner out, then remove from DOM when transition finishes
+            const bannerContainer = document.querySelector('.banner-container');
+            if (bannerContainer) {
+                // ensure reflow so transition runs if class added immediately
+                // eslint-disable-next-line no-unused-expressions
+                bannerContainer.offsetHeight;
+                bannerContainer.classList.add('fade-out');
+
+                const cleanup = () => {
+                    bannerContainer.removeEventListener('transitionend', cleanup);
+                    if (bannerContainer.parentNode) bannerContainer.parentNode.removeChild(bannerContainer);
+                };
+
+                bannerContainer.addEventListener('transitionend', cleanup);
+
+                // fallback: remove after 600ms in case transitionend doesn't fire
+                setTimeout(() => {
+                    if (document.body.contains(bannerContainer)) {
+                        try { cleanup(); } catch (e) { /* ignore */ }
+                    }
+                }, 600);
+            }
+
             // Rolar suavemente para a seção interativa
-            document.getElementById('interactiveSection').scrollIntoView({ behavior: 'smooth' });
+            interactive.scrollIntoView({ behavior: 'smooth' });
         }
         
         function showFact() {
-            // Esconder a mensagem anterior se existir
-            document.getElementById('unacceptableMessage').style.display = 'none';
-            // Mostrar o facto
-            document.getElementById('factMessage').style.display = 'block';
-            // Scroll para a mensagem
-            document.getElementById('factMessage').scrollIntoView({ behavior: 'smooth' });
+            // remove any existing unacceptable message
+            const existingUnacceptable = document.getElementById('unacceptableMessage');
+            if (existingUnacceptable) existingUnacceptable.remove();
+
+            // if fact message already exists, keep it; otherwise create it
+            let fact = document.getElementById('factMessage');
+            if (!fact) {
+                fact = document.createElement('div');
+                fact.className = 'message fact-message';
+                fact.id = 'factMessage';
+                fact.innerHTML = `
+                    <div class="fact-content">
+                        <h3>Ficamos felizes por saber!</h3>
+                        <br>
+                        <p>Em 2025, o GIT trabalhou para tornar o Oeiras Interativa mais rápido, intuitivo e acessível a todos. Que o novo ano traga ainda mais colaboração e inovação para o nosso território.</p> <p>Boas Festas!</p>
+                        <p></p>
+                    </div>
+                    
+                <!-- Small linked image grid (6 items) -->
+                <div class="grid-title">Explore os recursos</div>
+                <div class="resource-grid" aria-label="Recursos">
+                    <div class="resource-item"><a href="https://oeirasinterativa.oeiras.pt/#/ig/home" target="_blank" rel="noopener noreferrer" title="Geoportal"><img src="https://ik.imagekit.io/eydsmhc4x/natal/Captura%20de%20ecr%C3%A3%202025-12-18%20162855.png" alt="Geoportal"></a></div>
+                    <div class="resource-item"><a href="https://oeirasinterativa.oeiras.pt/dadosabertos/" target="_blank" rel="noopener noreferrer" title="Dados abertos"><img src="https://ik.imagekit.io/eydsmhc4x/natal/Captura%20de%20ecr%C3%A3%202025-12-18%20162904.png" alt="Dados abertos"></a></div>
+                    <div class="resource-item"><a href="https://oeirasinterativa.oeiras.pt/#/epl/home" target="_blank" rel="noopener noreferrer" title="Plantas de localização"><img src="https://ik.imagekit.io/eydsmhc4x/natal/Captura%20de%20ecr%C3%A3%202025-12-18%20162911.png" alt="Plantas de localização"></a></div>
+                    <div class="resource-item"><a href="https://oeirasinterativa.oeiras.pt/#/os/home" target="_blank" rel="noopener noreferrer" title="Observatório"><img src="https://ik.imagekit.io/eydsmhc4x/natal/Captura%20de%20ecr%C3%A3%202025-12-18%20162917.png" alt="Observatório"></a></div>
+                    <div class="resource-item"><a href="https://oeirasinterativa.oeiras.pt/#/meubairro/home" target="_blank" rel="noopener noreferrer" title="O meu bairro"><img src="https://ik.imagekit.io/eydsmhc4x/natal/Captura%20de%20ecr%C3%A3%202025-12-18%20162859.png" alt="O meu bairro"></a></div>
+                </div>
+                `;
+                document.getElementById('interactiveSection').appendChild(fact);
+            }
+
+            // ensure it's visible and scroll to it
+            fact.style.display = 'block';
+            fact.scrollIntoView({ behavior: 'smooth' });
         }
         
         function showUnacceptable() {
-            // Esconder a mensagem anterior se existir
-            document.getElementById('factMessage').style.display = 'none';
-            // Mostrar a mensagem de inadmissível
-            document.getElementById('unacceptableMessage').style.display = 'block';
-            
-            // Iniciar contagem regressiva (síncrona com o texto acima)
-            let seconds = 5;
-            const countdownElement = document.getElementById('countdown');
-            
+            // remove any existing fact message
+            const existingFact = document.getElementById('factMessage');
+            if (existingFact) existingFact.remove();
+
+            // create unacceptable message if needed
+            let un = document.getElementById('unacceptableMessage');
+            if (!un) {
+                un = document.createElement('div');
+                un.className = 'message unacceptable-message';
+                un.id = 'unacceptableMessage';
+                un.innerHTML = `
+                    <h3>O futuro de Oeiras passa por cada um de nós.</h3>
+                    <p></p>
+                    <p>O Oeiras Interativa não é apenas um portal; é a sua voz na gestão municipal. É nesta plataforma que pode reportar ocorrências, acompanhar projetos e decidir o futuro do município.</p>
+                    <p><b>O seu registo é o primeiro passo para uma cidadania ativa. </b></p>
+                    <p>A redirecionar em <b><span id="countdown">5</span></b> segundos...</p>
+                `;
+                document.getElementById('interactiveSection').appendChild(un);
+            }
+
+            // show it and start countdown
+            un.style.display = 'block';
+            let seconds = 10;
+            const countdownElement = un.querySelector('#countdown');
+
             const countdownInterval = setInterval(function() {
                 seconds--;
-                countdownElement.textContent = seconds;
-                
+                if (countdownElement) countdownElement.textContent = seconds;
+
                 if (seconds <= 0) {
                     clearInterval(countdownInterval);
-                    // Abrir a página de registo numa nova aba/janela (não substitui a página atual)
                     const url = 'https://oeirasinterativa.oeiras.pt/#/portal/auth/register';
                     window.open(url, '_blank', 'noopener,noreferrer');
                 }
             }, 1000);
-            
-            // Scroll para a mensagem
-            document.getElementById('unacceptableMessage').scrollIntoView({ behavior: 'smooth' });
+
+            // Scroll to the message
+            un.scrollIntoView({ behavior: 'smooth' });
         }
         
         // Para compatibilidade com clientes de email que não suportam JavaScript
