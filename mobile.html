@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feliz Natal - GIT (Mobile)</title>
+    <style>
+        :root {
+            --pine-green: #0b3d2e;
+            --festive-red: #b71c1c;
+            --warm-gold: #ffd54a;
+            --cream-bg: #fff8f0;
+            --card-bg: #ffffff;
+            --muted-text: #4b4b4b;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: var(--cream-bg);
+            color: var(--muted-text);
+        }
+
+        .email-container {
+            width: 100%;
+            min-height: 100vh;
+            background-color: var(--card-bg);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            background-color: var(--cream-bg);
+            color: var(--pine-green);
+            padding: 15px;
+            text-align: center;
+            font-size: 0.8rem;
+        }
+
+        .banner-container {
+            width: 100%;
+            aspect-ratio: 1 / 1; /* Quadrado para mobile */
+            position: relative;
+            overflow: hidden;
+        }
+
+        .banner-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .banner-content {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 20px;
+            background: linear-gradient(transparent, rgba(0,0,0,0.7));
+            text-align: center;
+        }
+
+        .click-here {
+            background-color: var(--festive-red);
+            color: white;
+            padding: 16px 20px;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 1.1rem;
+            border: none;
+            width: 90%;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .interactive-section {
+            padding: 25px 15px;
+            text-align: center;
+            background-image: linear-gradient(rgba(255,248,240,0.8), rgba(255,248,240,0.8)), 
+                              url('https://ik.imagekit.io/eydsmhc4x/natal/C%C3%B3pia%20de%20E%20um%20pr%C3%B3spero%20Ano%20Novo.png');
+            background-size: cover;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin: 20px 0;
+        }
+
+        .option-btn {
+            padding: 18px;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            border: none;
+            width: 100%;
+        }
+
+        .yes-btn { background: var(--pine-green); color: white; }
+        .no-btn { background: var(--festive-red); color: white; }
+
+        /* Grelha de Recursos 2x2 */
+        .resource-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            padding: 15px 0;
+        }
+
+        .resource-item img {
+            width: 100%;
+            border-radius: 8px;
+            border: 2px solid #eee;
+        }
+
+        .footer {
+            padding: 20px;
+            font-size: 0.85rem;
+            text-align: center;
+            background: var(--cream-bg);
+        }
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <div class="header"><h2>GABINETE DE INTELIGÊNCIA TERRITORIAL</h2></div>
+        
+        <div id="main-banner" class="banner-container">
+            <img class="banner-img" src="https://ik.imagekit.io/eydsmhc4x/natal/E%20um%20pr%C3%B3spero%20Ano%20Novo%20(1).png" alt="Banner">
+            <div class="banner-content">
+                <button class="click-here" onclick="showMobileInteractive()">Oeiras a um toque</button>
+            </div>
+        </div>
+
+        <div id="interactiveSection" style="display:none;" class="interactive-section">
+            <div class="question">O maior presente é um mundo mais <b>sustentável</b>.</div>
+            <p>Conhece o <b>Oeiras Interativa</b>?</p>
+            <div class="options">
+                <button class="option-btn yes-btn" onclick="showFact()">Sim, já conheço!</button>
+                <button class="option-btn no-btn" onclick="showUnacceptable()">Quero conhecer!</button>
+            </div>
+            <div id="content-anchor"></div>
+        </div>
+
+        <div class="footer">
+            <p>© 2025 GIT</p>
+            <p><a href="mailto:git@oeiras.pt">Contactar Suporte</a></p>
+        </div>
+    </div>
+
+    <script>
+        function showMobileInteractive() {
+            document.getElementById('main-banner').style.display = 'none';
+            document.getElementById('interactiveSection').style.display = 'block';
+        }
+
+        function showFact() {
+            const anchor = document.getElementById('content-anchor');
+            anchor.innerHTML = `
+                <div style="background: white; padding: 15px; border-radius: 10px; margin-top: 15px;">
+                    <h3>Boas Festas! ✨</h3>
+                    <p>Em 2025, o Oeiras Interativa será ainda mais rápido e intuitivo.</p>
+                    <div class="resource-grid">
+                        <div class="resource-item"><a href="https://oeirasinterativa.oeiras.pt/#/ig/home"><img src="https://ik.imagekit.io/eydsmhc4x/natal/Captura%20de%20ecr%C3%A3%202025-12-18%20162855.png"></a></div>
+                        <div class="resource-item"><a href="https://oeirasinterativa.oeiras.pt/dadosabertos/"><img src="https://ik.imagekit.io/eydsmhc4x/natal/Captura%20de%20ecr%C3%A3%202025-12-18%20162904.png"></a></div>
+                    </div>
+                </div>`;
+            anchor.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function showUnacceptable() {
+            const anchor = document.getElementById('content-anchor');
+            anchor.innerHTML = `
+                <div style="background: #fff4f4; padding: 15px; border-radius: 10px; margin-top: 15px; color: #b71c1c;">
+                    <h3>O futuro passa por si.</h3>
+                    <p>A redirecionar para o registo em 5 segundos...</p>
+                </div>`;
+            setTimeout(() => { window.location.href = "https://oeirasinterativa.oeiras.pt/#/portal/auth/register"; }, 5000);
+        }
+    </script>
+</body>
+</html>

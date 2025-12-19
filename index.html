@@ -378,12 +378,6 @@
         left:0; top:0; width:100%; height:100%; background-repeat:no-repeat; background-position:center center; background-size:cover;">
     </div>
 
-    <!-- Background video (MOV). Note: some browsers may not support .mov — consider providing an MP4/WebM fallback for wide compatibility. -->
-    <video id="backgroundVideo" class="background-video" autoplay muted loop playsinline>
-        <source src="https://ik.imagekit.io/eydsmhc4x/natal/AdobeStock_1839912194.mov" type="video/quicktime">
-        <!-- If you convert to mp4 use: type="video/mp4" and include an mp4 <source> here as fallback. -->
-    </video>
-
     <div class="email-container">
         <div class="header">
             <h2>GABINETE DE INTELIGÊNCIA TERRITORIAL</h2>
@@ -429,6 +423,12 @@
     </div>
 
     <script>
+
+        // Detetar dispositivos móveis antes de carregar o resto
+        if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth <= 768) {
+            window.location.href = "mobile.html"; 
+        }
+
         function showInteractiveSection() {
             const interactive = document.getElementById('interactiveSection');
             if (!interactive) return;
