@@ -129,13 +129,18 @@
         <div id="main-banner" class="banner-container">
             <img class="banner-img" src="https://ik.imagekit.io/eydsmhc4x/natal/E%20um%20pr%C3%B3spero%20Ano%20Novo%20(1).png" alt="Banner">
             <div class="banner-content">
-                <button class="click-here" onclick="showMobileInteractive()">Oeiras a um toque</button>
+                <button class="click-here" onclick="showMobileInteractive()">Oeiras à distância de um clique</button>
             </div>
         </div>
 
         <div id="interactiveSection" style="display:none;" class="interactive-section">
-            <div class="question">O maior presente é um mundo mais <b>sustentável</b>.</div>
-            <p>Conhece o <b>Oeiras Interativa</b>?</p>
+            <div class="question">Este Natal o maior presente é um mundo mais <b>justo</b> e <b>sustentável</b> para todos.</div>
+            <br>
+            <p style="color: var(--pine-green); font-size: 1.0em; max-width: 500px; margin: 15px auto; line-height: 1.5;">
+                No GIT, criamos <b>inteligência territorial</b>. <p>No <a href="https://oeirasinterativa.oeiras.pt/#/portal/home"></a><b>Oeiras Interativa</b></a> partilhamo-la com o mundo.</p>
+            </p>
+            <br>
+            <p>Já conhece o <b>Oeiras Interativa</b>?</p>
             <div class="options">
                 <button class="option-btn yes-btn" onclick="showFact()">Sim, já conheço!</button>
                 <button class="option-btn no-btn" onclick="showUnacceptable()">Quero conhecer!</button>
@@ -145,7 +150,7 @@
 
         <div class="footer">
             <p>© 2025 GIT</p>
-            <p><a href="mailto:git@oeiras.pt">Contactar Suporte</a></p>
+            <p><a href="https://oeirasinterativa.oeiras.pt/">Visite o Oeiras Interativa</a>     |    <p><a href="mailto:git@oeiras.pt">Tem dúvidas? Contacte-nos</a></p>
         </div>
     </div>
 
@@ -159,8 +164,8 @@
             const anchor = document.getElementById('content-anchor');
             anchor.innerHTML = `
                 <div style="background: white; padding: 15px; border-radius: 10px; margin-top: 15px;">
-                    <h3>Boas Festas! ✨</h3>
                     <p>Em 2025, o Oeiras Interativa será ainda mais rápido e intuitivo.</p>
+                    <h3>Boas Festas! ✨</h3>
                     <div class="resource-grid">
                         <div class="resource-item"><a href="https://oeirasinterativa.oeiras.pt/#/ig/home"><img src="https://ik.imagekit.io/eydsmhc4x/natal/Captura%20de%20ecr%C3%A3%202025-12-18%20162855.png"></a></div>
                         <div class="resource-item"><a href="https://oeirasinterativa.oeiras.pt/dadosabertos/"><img src="https://ik.imagekit.io/eydsmhc4x/natal/Captura%20de%20ecr%C3%A3%202025-12-18%20162904.png"></a></div>
@@ -173,8 +178,12 @@
             const anchor = document.getElementById('content-anchor');
             anchor.innerHTML = `
                 <div style="background: #fff4f4; padding: 15px; border-radius: 10px; margin-top: 15px; color: #b71c1c;">
-                    <h3>O futuro passa por si.</h3>
+                    <h3>O futuro de Oeiras passa por cada um de nós.</h3>
+                    <p>O Oeiras Interativa não é apenas um portal; é a sua voz na gestão municipal. É nesta plataforma que pode reportar ocorrências, acompanhar projetos e decidir o futuro do município.</p>
+                    <p><b>O seu registo é o primeiro passo para fazer a diferença. </b></p>
+                    <p><h2>Boas Festas! ✨</h2></p>
                     <p>A redirecionar para o registo em 5 segundos...</p>
+                    <p><h4 style="color: var(--muted-text); font-size: 0.70em;">Se não redirecionado, <a href="https://oeirasinterativa.oeiras.pt/#/portal/auth/register" target="_blank" rel="noopener noreferrer">clique aqui</a></h4></p>
                 </div>`;
             setTimeout(() => { window.location.href = "https://oeirasinterativa.oeiras.pt/#/portal/auth/register"; }, 5000);
         }
